@@ -26,8 +26,10 @@ server.post('/api/zoos', async (req, res) => {
       .where({ id })
       .first()
     res.status(201).json(zoo)
+
+    // db.insert(req.body).into('zoos').then(ids => res.status(201).json(ids))
   } catch(error) {
-    res.status(500).json(error)
+    res.status(500).json({ error: "some useless error message. j/k the animal already exist"})
   }
 })
 
@@ -35,6 +37,15 @@ server.get('/api/zoos', async (req, res) => {
   try {
     const zoos = await db('zoos')
     res.status(200).json(zoos)
+  } catch(error) {
+    res.status(500).json(error)
+  }
+})
+
+server.get('/api/zoos/:id', async (req, res) => {
+  try {
+    const zoo = await db('zoos').where({ id: req.params.id }).first()
+    res.status(200).json(zoo)
   } catch(error) {
     res.status(500).json(error)
   }
