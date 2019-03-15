@@ -18,6 +18,19 @@ server.use(helmet());
 
 // endpoints here
 
+server.post('/api/zoos', async (req, res) => {
+  try {
+    const [id] = await db('zoos').insert(req.body)
+
+    const zoo = await db('zoos')
+      .where({ id })
+      .first()
+    res.status(201).json(zoo)
+  } catch(error) {
+    res.status(500).json(error)
+  }
+})
+
 server.get('/api/zoos', async (req, res) => {
   try {
     const zoos = await db('zoos')
